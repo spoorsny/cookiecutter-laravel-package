@@ -1,7 +1,7 @@
 {
-    "name": "vendor/package",
+    "name": "{{ cookiecutter.vendor_name }}/{{ cookiecutter.package_name }}",
     "type": "library",
-    "description": "The skeleton package for the Laravel framework.",
+    "description": "{{ cookiecutter.package_description }}",
     "keywords": [
         "laravel",
         "package"
@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "{{ cookiecutter.php_namespace }}\\": "app/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "{{ cookiecutter.php_namespace }}\\Tests\\": "tests/"
         }
     },
     "scripts": {
