@@ -35,7 +35,7 @@ Also consult [Composer's documentation][composer] for more information.
 Clone the source code from GitHub:
 
 ```bash
-git clone https://github.com/{{ cookiecutter.github_username }}/{{ github_repository }}
+git clone https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository }}
 ```
 
 Install the Composer dependencies:
