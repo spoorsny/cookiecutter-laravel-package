@@ -41,7 +41,7 @@ git clone https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.
 Install the Composer dependencies:
 
 ```bash
-cd {{ cookiercutter.github_repository }}
+cd {{ cookiecutter.github_repository }}
 composer install
 ```
 
