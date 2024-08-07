@@ -10,8 +10,8 @@ A [cookiecutter](https://cookiecutter.readthedocs.io/en/stable/) for
   commands, facades, etc.
 - a Continuous Integration workflow for GitHub Actions that lints and tests
   your code and also measures code coverage. By default, the code coverage job
-  fails if the code coverage is not 100%. This can be adjusted in the
-  `composer.json` file.
+  fails if the code coverage is not <u>100%</u>. This can be adjusted in the
+  scripts section of `composer.json` file.
 - a **README.md** file with a beautiful banner from
   [Beyond Code](https://banners.beyondco.de), buttons indicating the version of
   the package currently on [Packagist](https://packagist.org), the number of
@@ -85,10 +85,17 @@ Copyright &copy; 2024 Geoffrey Bernardo van Wyk (<https://geoffreyvanwyk.dev>)
 
 This file is part of Cookiecutter for Laravel package.
 
-Cookiecutter for Laravel package is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Cookiecutter for Laravel package is free software: you can redistribute it
+and/or modify it under the terms of the GNU General Public License as published
+by the Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
 
-Cookiecutter for Laravel package is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+Cookiecutter for Laravel package is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+License for more details.
 
-You should have received a copy of the GNU General Public License along with Cookiecutter for Laravel package. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with
+Cookiecutter for Laravel package. If not, see <https://www.gnu.org/licenses/>.
 
 For a copy of the license, see the [COPYING](COPYING) file in this repository.
