@@ -1,0 +1,128 @@
+---
+# This file is part of Cookiecutter for Laravel package.
+#
+# Cookiecutter for Laravel package is free software: you can redistribute it
+# and/or modify it under the terms of the GNU General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or (at your
+# option) any later version.
+#
+# Cookiecutter for Laravel package is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+# License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Cookiecutter for Laravel package. If not, see <https://www.gnu.org/licenses/>.
+
+##
+# GitHub Actions workflow that lints and tests new code before its integration
+# into the master branch of the source code repository.
+#
+# @see        {@link https://docs.github.com/en/actions} GitHub Actions
+# @author     Geoffrey Bernardo van Wyk <geoffrey@vanwyk.biz>
+# @copyright  2024 Geoffrey Bernardo van Wyk {@link https://geoffreyvanwyk.dev}
+# @license    {@link http://www.gnu.org/copyleft/gpl.html} GNU GPL v3 or later
+##
+
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  cut-package:
+    name: Cut package from template
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout the source code from Git
+        uses: actions/checkout@v4
+
+      - name: Install Cookiecutter
+        run: pip install cookiecutter
+
+      - name: Install jq - commandline JSON processor
+        run: sudo apt install --yes jq
+
+      - name: Fill in template values
+        run: >
+          jq '.vendor_name |= "spoorsny"' cookiecutter.json | 
+          jq '.package_name |= "laravel-potjiekos"' |
+          jq '.package_tite |= "Potjiekos for Laravel"' |
+          jq '.package_description |= "Have some potjiekos with your Laravel."' |
+          jq '.php_namespace |= "Spoorsny\\Laravel"' |
+          jq '.github_username |= "spoorsny"' |
+          jq '.github_repository |= "laravel-potjiekos"' |
+          jq '.author_name |= "John Doe"' |
+          jq '.author_email |= "john@example.com"' |
+          jq '.author_website |= "https://www.example.com"'
+          > values.json 
+          && rm cookiecutter.json
+          && mv values.json cookiecutter.json
+
+      - name: Cut package from template
+        run: |
+          cd ..
+          cookiecutter --no-input cookiecutter-laravel-package
+          mv laravel-potjiekos cookiecutter-laravel-package
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: laravel-potjiekos
+          name: laravel-potjiekos
+          retention-days: 1
+
+  lint-github-actions:
+    name: Lint GitHub Actions workflows
+    needs: cut-package
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: laravel-potjiekos
+          path: laravel-potjiekos
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+
+      - name: Set up linter
+        run: go install github.com/rhysd/actionlint/cmd/actionlint@latest
+
+      - name: Lint workflows
+        run: actionlint laravel-potjiekos/.github/workflows/*.yml
+
+  test-commands:
+    name: Test package commands
+    needs: lint-github-actions
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: laravel-potjiekos
+          path: laravel-potjiekos
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: curl, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, iconv
+          coverage: xdebug
+
+      - name: Test commands
+        run: |
+          cd laravel-potjiekos
+          composer install
+          php artisan make:model --migration Car
+          php artisan migrate
+          php artisan make:test --unit ExampleTest
+          php artisan cache:clear
+          composer cs-fix
+          composer test
+          composer test-coverage
