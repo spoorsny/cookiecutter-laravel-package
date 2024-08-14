@@ -24,18 +24,18 @@
     },
     "autoload": {
         "psr-4": {
-            "{{ cookiecutter.php_namespace }}\\": "src/"
+            "{{ cookiecutter.php_namespace | replace('\\', '\\\\') }}\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "{{ cookiecutter.php_namespace }}\\Tests\\": "tests/"
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
         "cs-fix": "./vendor/bin/pint --preset psr12",
-        "test": "./artisan test",
-        "test-coverage": "XDEBUG_MODE=coverage ./artisan test --coverage --coverage-clover phpunit-code-coverage-clover.xml",
+        "test": "php artisan test",
+        "test-coverage": "XDEBUG_MODE=coverage php artisan test --coverage --coverage-clover phpunit-code-coverage-clover.xml",
         "test-coverage-check": "./vendor/bin/coverage-check phpunit-code-coverage-clover.xml 100 --only-percentage",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
